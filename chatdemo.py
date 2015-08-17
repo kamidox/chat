@@ -76,6 +76,12 @@ class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.render("index.html", messages=global_message_buffer.cache)
 
+class StatisticsHandler(tornado.web.RequestHandler):
+    def get(self):
+        statistics = {
+            'Number of connections': str(len(global_message_buffer.waiters))
+        }
+        self.write(statistics)
 
 class MessageNewHandler(tornado.web.RequestHandler):
     def post(self):
@@ -115,13 +121,14 @@ def main():
     app = tornado.web.Application(
         [
             (r"/", MainHandler),
+            (r"/statistics", StatisticsHandler),
             (r"/a/message/new", MessageNewHandler),
             (r"/a/message/updates", MessageUpdatesHandler),
             ],
         cookie_secret="__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",
         template_path=os.path.join(os.path.dirname(__file__), "templates"),
         static_path=os.path.join(os.path.dirname(__file__), "static"),
-        xsrf_cookies=True,
+        xsrf_cookies=False,
         debug=options.debug,
         )
     app.listen(options.port)
