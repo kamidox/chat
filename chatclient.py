@@ -3,8 +3,8 @@ import time
 from datetime import datetime
 from tornado import httpclient, gen, ioloop, escape, queues
 
-MAX_CLIENTS = 500
-HOST = 'http://localhost:8888'
+MAX_CLIENTS = 15000
+HOST = 'http://chat.kamidox.com:8080'
 
 def timestamp():
     t = datetime.now()
